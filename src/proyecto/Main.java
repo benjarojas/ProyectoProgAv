@@ -7,6 +7,18 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
+		String txtLine;
+		BufferedReader txtRead = new BufferedReader(new FileReader("turnosEnfermeras.txt"));
+		
+		ArrayList<String> out = new ArrayList<String>();
+		
+		while((txtLine = txtRead.readLine()) != null)
+		{
+			out.add(txtLine);
+		}
+		
+		txtRead.close();
+		
 		Hashtable<String, Dia> semana = new Hashtable<>();
 		semana.put("Lunes", new Dia("Lunes"));
 		semana.put("Martes", new Dia("Martes"));
@@ -16,12 +28,20 @@ public class Main {
 		semana.put("Sabado", new Dia("Sabado"));
 		semana.put("Domingo", new Dia("Domingo"));
 		
-		
-		
 		BufferedReader lector = new BufferedReader( new InputStreamReader( System.in ) );
 		
 		int opcion = 0;
 		String input;
+		
+		for (int i = 0; i < out.size(); i++) {
+			String[] arrayTurno = out.get(i).split(",", 5);
+			Turno turnoCargar = new Turno();
+			turnoCargar.setHoraInicio(arrayTurno[1]);
+			turnoCargar.setHoraFin(arrayTurno[2]);
+			turnoCargar.setTrabajador(arrayTurno[3]);
+			turnoCargar.setEspecialidad(arrayTurno[4]);
+			semana.get(arrayTurno[0]).addTurno(turnoCargar);
+		}
 		
 		while(true)
 		{

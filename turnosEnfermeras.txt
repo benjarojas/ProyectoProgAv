@@ -1,0 +1,3 @@
+Lunes,11:00,12:00,Javiera,Neurologia
+Lunes,00:00,06:00,Gabriela,UCI
+Martes,10:00,16:00,Benjamina,Pediatria
