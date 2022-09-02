@@ -6,16 +6,17 @@ public class Turno {
 	private String trabajador;
 	private String especialidad;
 	
-	public Turno() {
-		horaInicio = new String();
-		horaFin = new String();
-		trabajador = new String();
-		especialidad = new String();
-	}
-	
 	public void setHoraInicio(String hora)
 	{
 		horaInicio = hora;
+	}
+	
+	public void setHoraInicio(int hora)
+	{
+		horaInicio = hora+"";
+		String horas = horaInicio.substring(0, (horaInicio.length()/2));
+		String min = horaInicio.substring((horaInicio.length()/2));
+		horaInicio = horas + ":" + min;
 	}
 	
 	public String getHoraInicio()
@@ -26,6 +27,14 @@ public class Turno {
 	public void setHoraFin(String hora)
 	{
 		horaFin = hora;
+	}
+	
+	public void setHoraFin(int hora)
+	{
+		horaFin = hora+"";
+		String horas = horaFin.substring(0, (horaFin.length()/2));
+		String min = horaFin.substring((horaFin.length()/2));
+		horaFin = horas + ":" + min;
 	}
 	
 	public String getHoraFin()

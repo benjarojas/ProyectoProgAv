@@ -3,8 +3,7 @@ import java.util.ArrayList;
 
 public class Dia {
 
-	public ArrayList<Turno> turnosDia = new ArrayList<Turno>();
-	
+	private ArrayList<Turno> turnosDia = new ArrayList<Turno>();
 	private String nombreDia;
 	
 	public Dia(String Nombre)
@@ -27,19 +26,32 @@ public class Dia {
 		turnosDia.add(turno);
 	}
 	
-	public void listarTurnos()
+	public void addTurno(String horaInicio, String horaFin, String trabajador, String especialidad)
 	{
-		for (int i = 0; i < turnosDia.size(); i++) {
-			System.out.println("Nombre: "+ turnosDia.get(i).getTrabajador());
-		    System.out.println("Especialidad: "+ turnosDia.get(i).getEspecialidad());
-		    System.out.println("Hora Inicio: " + turnosDia.get(i).getHoraInicio());
-		    System.out.println("Hora Fin: "+ turnosDia.get(i).getHoraFin());
-		}
+		Turno newTurno = new Turno();
+		newTurno.setEspecialidad(especialidad);
+		newTurno.setHoraInicio(horaFin);
+		newTurno.setHoraFin(horaFin);
+		newTurno.setTrabajador(trabajador);
+		
+		turnosDia.add(newTurno);
 	}
 	
 	public ArrayList<Turno> getTurnos()
 	{
 		return turnosDia;
+	}
+	
+	public void listarTurnos()
+	{
+		for (int i = 0; i < turnosDia.size(); i++) {
+			System.out.println("----- Turno "+ (i+1) + " -----");
+			System.out.println("Nombre: "+ turnosDia.get(i).getTrabajador());
+		    System.out.println("Especialidad: "+ turnosDia.get(i).getEspecialidad());
+		    System.out.println("Hora Inicio: " + turnosDia.get(i).getHoraInicio());
+		    System.out.println("Hora Fin: " + turnosDia.get(i).getHoraFin());
+		    System.out.println("");
+		}
 	}
 	
 }
