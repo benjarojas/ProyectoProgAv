@@ -3,29 +3,38 @@ import java.util.ArrayList;
 
 public class Dia {
 
+	// ArrayList turnosDia
+	// Se almacenaran todos los objetos Turno correspondientes al día
 	private ArrayList<Turno> turnosDia = new ArrayList<Turno>();
+	
+	// Nombre día
 	private String nombreDia;
 	
+	// Constructor con parámetro Nombre
 	public Dia(String Nombre)
 	{
 		nombreDia = Nombre;
 	}
 	
+	// Setter nombreDia
 	public void setNombreDia(String nombre)
 	{
 		nombreDia = nombre;
 	}
 	
+	// Getter nombreDia
 	public String getNombreDia()
 	{
 		return nombreDia;
 	}
 	
+	// Método para agregar un objeto Turno al ArrayList turnosDia
 	public void addTurno(Turno turno)
 	{
 		turnosDia.add(turno);
 	}
 	
+	// Método para crear un objeto Turno y agregarlo al ArrayList turnosDia
 	public void addTurno(String horaInicio, String horaFin, String trabajador, String especialidad)
 	{
 		Turno newTurno = new Turno();
@@ -37,21 +46,10 @@ public class Dia {
 		turnosDia.add(newTurno);
 	}
 	
+	// Retorna un ArrayList con todos los turnos agendados para ese día
 	public ArrayList<Turno> getTurnos()
 	{
 		return turnosDia;
-	}
-	
-	public void listarTurnos()
-	{
-		for (int i = 0; i < turnosDia.size(); i++) {
-			System.out.println("----- Turno "+ (i+1) + " -----");
-			System.out.println("Nombre: "+ turnosDia.get(i).getTrabajador());
-		    System.out.println("Especialidad: "+ turnosDia.get(i).getEspecialidad());
-		    System.out.println("Hora Inicio: " + turnosDia.get(i).getHoraInicio());
-		    System.out.println("Hora Fin: " + turnosDia.get(i).getHoraFin());
-		    System.out.println("");
-		}
 	}
 	
 }
