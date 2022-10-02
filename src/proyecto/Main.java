@@ -1,7 +1,6 @@
 package proyecto;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class Main {
 
@@ -19,21 +18,16 @@ public class Main {
 		BufferedReader txtRead = new BufferedReader(new FileReader("turnosEnfermeras.txt"));
 		
 		
-		// Creamos HashMap que corresponde a la semana y agregamos sus objetos de tipo Dia
-		HashMap<String, Dia> semana = new HashMap<>();
-		semana.put("Lunes", new Dia("Lunes")); // La clave del cada elemento es un string con su nombre y el valor es un objeto de tipo Dia
-		semana.put("Martes", new Dia("Martes")); // el objeto Dia se construye con su nombre respectivo
-		semana.put("Miercoles", new Dia("Miercoles"));
-		semana.put("Jueves", new Dia("Jueves"));
-		semana.put("Viernes", new Dia("Viernes"));
-		semana.put("Sabado", new Dia("Sabado"));
-		semana.put("Domingo", new Dia("Domingo"));
+		
+		Semana vari = new Semana();
 		
 		// Instanciamos un lector para leer opciones del menu
 		BufferedReader lector = new BufferedReader( new InputStreamReader( System.in ) );
-		
+		TurnoMañanero turnoCargar2 = new TurnoMañanero("11:00","12:00", "Javiera", "Neurologia");
+		System.out.println(turnoCargar2.getHoraInicios());
 		int opcion = 0;
 		String input;
+		String input2;
 		
 		// Creamos un objeto de tipo Turno
 		// Seteamos sus atributos según cada línea del archivo txt
@@ -44,18 +38,26 @@ public class Main {
 			// El resto de los Strings corresponden a los detalles (horas, nombre y especialidad)
 			String[] arrayTurno = txtLine.split(",", 5);
 			Turno turnoCargar = new Turno(arrayTurno[1], arrayTurno[2], arrayTurno[3], arrayTurno[4]);
-			semana.get(arrayTurno[0]).addTurno(turnoCargar);
+			if(vari.verificar(arrayTurno[0]))
+			{
+				vari.agregarTurno(arrayTurno[0], turnoCargar);
+			}
 		}
+	
+		
+		
 		
 		// Cerramos archivo txt
 		txtRead.close();
-				
+			
 		while(true)
 		{
 			System.out.println("Ingrese opcion: ");
 			System.out.println("1.- Agregar turno");
 			System.out.println("2.- Listar turnos por día");
-			System.out.println("3.- Salir");
+			System.out.println("3.- Eliminar turno");
+			System.out.println("4.- Modificar turno");
+			System.out.println("6.- Salir");
 			
 			// Transformamos String en entero
 			opcion = Integer.parseInt(lector.readLine());
@@ -94,7 +96,7 @@ public class Main {
 				// Intentamos añadir el turno al mapa, si la clave no existe
 				// usamos catch para manejar la excepción
 				try {
-					semana.get(input).addTurno(nuevoTurno);
+					vari.agregarTurno(input, nuevoTurno);
 				} catch(Exception e) {
 					System.out.println("Error: no se pudo ingresar el turno. Ingrese correctamente el día.");
 				}
@@ -108,24 +110,8 @@ public class Main {
 				// Intentamos acceder al valor en el mapa, si no existe
 				// usamos catch para manejar la excepcion mostrando un error
 				try {
-					
-					// Obtenemos un ArrayList con todos los turnos del Día seleccionado
-					ArrayList<Turno> listaTurnos = semana.get(input).getTurnos();
-					
-					if(listaTurnos.size() == 0)
-					{
-						System.out.println("No hay turnos agendados para el día "+input+"!");
-						break;
-					}
-					
-					for (int i = 0; i < listaTurnos.size(); i++) {
-						System.out.println("----- Turno "+ (i+1) + " -----");
-						System.out.println("Nombre: "+ listaTurnos.get(i).getTrabajador());
-					    System.out.println("Especialidad: "+ listaTurnos.get(i).getEspecialidad());
-					    System.out.println("Hora Inicio: " + listaTurnos.get(i).getHoraInicio());
-					    System.out.println("Hora Fin: " + listaTurnos.get(i).getHoraFin());
-					    System.out.println("");
-					}
+
+					vari.listarTurnosDia(input);
 					
 				} catch(Exception e) {
 					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
@@ -133,12 +119,48 @@ public class Main {
 				break;
 				
 			case 3:
+				System.out.println("Ingrese dia del turno");
+				input = lector.readLine(); // Leemos el turno (Ej: Lunes)
+				System.out.println("Ingrese nombre del trabajador");
+				input2 = lector.readLine(); 
+				
+				try {
+
+					vari.eliminarTurnoDia(input, input2);
+					
+				} catch(Exception e) {
+					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
+				}
+				break;
+			
+			case 4:
+				System.out.println("Ingrese dia del turno");
+				input = lector.readLine(); // Leemos el turno (Ej: Lunes)
+				System.out.println("Ingrese nombre del trabajador");
+				input2 = lector.readLine(); 
+				
+				try {
+
+					vari.modificarTurnoDia(input, input2);
+					
+				} catch(Exception e) {
+					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
+				}
 				break;
 			}
+				
 			
-			if(opcion == 3) break;
-		}
+			if(opcion == 6) {
 
+				vari.getTurno2();
+
+				break;
+				
+				
+				}
+			
+		}
+		
 		
 	}
 
