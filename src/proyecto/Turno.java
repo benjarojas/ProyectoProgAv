@@ -2,6 +2,7 @@ package proyecto;
 public class Turno {
 
 	private String horaInicio;
+	private String diaTurno;
 	private String horaFin;
 	private String trabajador;
 	private String especialidad;
@@ -12,6 +13,16 @@ public class Turno {
 	// Constructor Turno con parámetros
 	public Turno(String horaInicio, String horaFin, String trabajador, String especialidad)
 	{
+		this.horaInicio = horaInicio;
+		this.horaFin = horaFin;
+		this.trabajador = trabajador;
+		this.especialidad = especialidad;
+	}
+	
+	// Constructor Turno con parámetros
+	public Turno(String diaTurno, String horaInicio, String horaFin, String trabajador, String especialidad)
+	{
+		this.diaTurno = diaTurno;
 		this.horaInicio = horaInicio;
 		this.horaFin = horaFin;
 		this.trabajador = trabajador;
@@ -87,5 +98,17 @@ public class Turno {
 	{
 		return especialidad;
 	}
+	
+	// Setter diaTurno
+	public void setDiaTurno(String diaTurno)
+	{
+		this.diaTurno = diaTurno;
+	}
+	
+	// Getter diaTurno
+	public String getDiaTurno()
+	{
+		return this.diaTurno;
+	}	
 	
 }

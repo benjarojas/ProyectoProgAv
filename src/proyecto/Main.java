@@ -1,30 +1,20 @@
 package proyecto;
 import java.io.*;
 
-
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		// TODO:
-		//SIA2.5 Se deben incluir al menos 1 funcionalidad propia que sean de utilidad para el negocio (distintas
-		//de la inserción, edición, eliminación y reportes). Específicamente: - Subconjunto filtrado por criterio: considera la selección de un subconjunto de objetos
-		//basado en un criterio específico, involucrando 1 o más colecciones. Por ejemplo, selección
-		//de los alumnos con nota final entre 4,0 y 7,0 de entre todos los cursos; o seleccionar a todos
-		//los pasajeros que tengan asiento impar de entre todos los buses de la compañía.
-		//SIA2.9 Crear 2 clases que extiendan de una Excepción y que se utilicen en el programa
-		
 		// Linea del archivo y lector de archivo txt
 		String txtLine;
 		BufferedReader txtRead = new BufferedReader(new FileReader("turnosEnfermeras.txt"));
-		
 		
 		
 		Semana vari = new Semana();
 		
 		// Instanciamos un lector para leer opciones del menu
 		BufferedReader lector = new BufferedReader( new InputStreamReader( System.in ) );
-		TurnoMañanero turnoCargar2 = new TurnoMañanero("11:00","12:00", "Javiera", "Neurologia");
-		System.out.println(turnoCargar2.getHoraInicios());
+		//Turno turnoCargar2 = new TurnoAm("11:00","12:00", "Javiera", "Neurologia");
+		//System.out.println(turnoCargar2.getHoraInicio());
 		int opcion = 0;
 		String input;
 		String input2;
@@ -37,10 +27,12 @@ public class Main {
 			// El primer String del arreglo corresponde al nombre del Día del turno
 			// El resto de los Strings corresponden a los detalles (horas, nombre y especialidad)
 			String[] arrayTurno = txtLine.split(",", 5);
-			Turno turnoCargar = new Turno(arrayTurno[1], arrayTurno[2], arrayTurno[3], arrayTurno[4]);
-			if(vari.verificar(arrayTurno[0]))
+			Turno turnoCargar = new Turno(arrayTurno[0], arrayTurno[1], arrayTurno[2], arrayTurno[3], arrayTurno[4]);
+			try
 			{
 				vari.agregarTurno(arrayTurno[0], turnoCargar);
+			} catch(DiaInvalidoException e){
+				break;
 			}
 		}
 	
@@ -57,7 +49,9 @@ public class Main {
 			System.out.println("2.- Listar turnos por día");
 			System.out.println("3.- Eliminar turno");
 			System.out.println("4.- Modificar turno");
-			System.out.println("6.- Salir");
+			System.out.println("5.- Filtrar turnos por criterio");
+			System.out.println("6.- Generar reporte");
+			System.out.println("7.- Salir");
 			
 			// Transformamos String en entero
 			opcion = Integer.parseInt(lector.readLine());
@@ -73,6 +67,7 @@ public class Main {
 				// No se utiliza el constructor con parámetros
 				// para no crear variables extra.
 				Turno nuevoTurno = new Turno();
+				nuevoTurno.setDiaTurno(input); // Seteamos el dia del turno
 				
 				// Intentamos setear los atributos del Turno
 				// Ante cualquier error, manejamos la excepción
@@ -97,7 +92,7 @@ public class Main {
 				// usamos catch para manejar la excepción
 				try {
 					vari.agregarTurno(input, nuevoTurno);
-				} catch(Exception e) {
+				} catch(DiaInvalidoException e) {
 					System.out.println("Error: no se pudo ingresar el turno. Ingrese correctamente el día.");
 				}
 				
@@ -110,10 +105,8 @@ public class Main {
 				// Intentamos acceder al valor en el mapa, si no existe
 				// usamos catch para manejar la excepcion mostrando un error
 				try {
-
 					vari.listarTurnosDia(input);
-					
-				} catch(Exception e) {
+				} catch(DiaInvalidoException e) {
 					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
 				}
 				break;
@@ -128,31 +121,105 @@ public class Main {
 
 					vari.eliminarTurnoDia(input, input2);
 					
-				} catch(Exception e) {
+				} catch(DiaInvalidoException e) {
 					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
+				} catch (NoEncontradoException a) {
+					System.out.println("Error: El trabajador no fue encontrado!");
 				}
 				break;
 			
 			case 4:
-				System.out.println("Ingrese dia del turno");
+				System.out.println("Ingrese dia del turno: ");
 				input = lector.readLine(); // Leemos el turno (Ej: Lunes)
-				System.out.println("Ingrese nombre del trabajador");
+				System.out.println("Ingrese nombre del trabajador: ");
 				input2 = lector.readLine(); 
 				
 				try {
 
 					vari.modificarTurnoDia(input, input2);
 					
-				} catch(Exception e) {
+				} catch(DiaInvalidoException e) {
 					System.out.println("Error: El valor ingresado no corresponde a un día válido!");
+				} catch (NoEncontradoException e) {
+					System.out.println("Error: El trabajador no fue encontrado!");
+				}
+				break;
+			
+			case 5:
+				System.out.println("\nFiltrar por: ");
+				System.out.println("1.- Nombre trabajador");
+				System.out.println("2.- Especialidad");
+				System.out.println("3.- Cancelar\n");
+				
+				int filtro = Integer.parseInt(lector.readLine());
+				
+				switch(filtro)
+				{
+				case 1:
+					System.out.println("Ingrese nombre del trabajador: ");
+					input = lector.readLine(); 
+					vari.filtrarTurnosTrabajador(input);
+					break;
+				case 2:
+					System.out.println("Ingrese especialidad: ");
+					input = lector.readLine(); 
+					vari.filtrarTurnosEspecialidad(input);
+					break;
+				case 3:
+					break;
+				}
+				
+				break;
+				
+			case 6:
+				System.out.println("\nGenerar reporte: ");
+				System.out.println("1.- Todos los turnos de un trabajador");
+				System.out.println("2.- Todos los turnos de una especialidad");
+				System.out.println("3.- Todos los turnos de un dia");
+				System.out.println("4.- Especialidades y cantidad de turnos asociados");
+				System.out.println("5.- Cancelar\n");
+				
+				int reporte = Integer.parseInt(lector.readLine());
+				
+				switch(reporte)
+				{
+				case 1:
+					System.out.println("Ingrese el nombre del trabajador: ");
+					input = lector.readLine(); 
+					System.out.println("Ingrese el nombre del archivo: ");
+					input2 = lector.readLine();
+				    vari.reporteTurnosTrabajador(input, input2);
+					break;
+				case 2:
+					System.out.println("Ingrese la especialidad: ");
+					input = lector.readLine(); 
+					System.out.println("Ingrese el nombre del archivo: ");
+					input2 = lector.readLine();
+				    vari.reporteTurnosEspecialidad(input, input2);
+					break;
+				case 3:
+					System.out.println("Ingrese el dia: ");
+					input = lector.readLine(); 
+					System.out.println("Ingrese el nombre del archivo: ");
+					input2 = lector.readLine();
+					try {
+				    vari.reporteTurnosDia(input, input2);
+					} catch(DiaInvalidoException e) {
+						System.out.println("El día ingresado no existe!\n");
+					}
+					
+				case 4:
+					break;
+					
+				case 5:
+					break;
 				}
 				break;
 			}
-				
 			
-			if(opcion == 6) {
+			if(opcion == 7) {
 
-				vari.getTurno2();
+				vari.guardarCambios();
 
 				break;
 				
